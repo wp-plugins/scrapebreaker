@@ -6,7 +6,7 @@ Requires at least: 2.8
 Tested up to: 3.9
 Stable tag: trunk
 
-A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
+A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques.
 
 == Description == 
 
