@@ -1,7 +1,7 @@
 === ScrapeBreaker ===
 Contributors: RedSand
 Donate link: http://www.redsandmarketing.com/scrapebreaker-donate/
-Tags: framebreaker, frame-breaker, frames, frame, iframe, break, scrape, scraper, scraping, anti-scraping, seo
+Tags: framebreaker, frame-breaker, frame, break, javascript, anti-scraping, seo
 Requires at least: 2.8
 Tested up to: 3.9
 Stable tag: trunk
