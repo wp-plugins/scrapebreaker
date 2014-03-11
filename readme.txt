@@ -18,9 +18,9 @@ Also some well-known sites display a bar with their content above your content, 
 
 Other scrapers just outright jack your site content. Well, that's over now.
 
-This plugin is better than other any frame breaker plugins out there. Try it and see for yourself.
+This plugin is better than other any frame-breaker plugins out there. Other frame-breakers will only test to see if your site is framed or not. This one will test to see if your content is present on a different domain, and if so, will redirect to the original content's URL. Try it and see for yourself.
 
-* Get your website visitors back
+* Get your website visitors back.
 * Retain credit for your work.
 * Protect your website content and your brand.
 * Improve your SEO.
