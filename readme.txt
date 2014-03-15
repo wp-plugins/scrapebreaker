@@ -35,6 +35,7 @@ This plugin is better than other any frame-breaker plugins out there. Other fram
 == Changelog ==
 
 Version 1.0.1.0 *released 03/15/14*
+
 * Added *X-Frame-Options* to HTTP headers for increased protection against framing and clickjacking.
 
 Version 1.0.0.0 *released 03/10/14*
