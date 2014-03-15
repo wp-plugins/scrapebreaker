@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.0.0.0
+Version: 1.0.1.0
 Author URI: http://www.redsandmarketing.com/
 License: GPLv2
 */
@@ -33,12 +33,18 @@ My use of the end curly braces "}" is a little funky in that I indent them, I kn
 */
 
 // Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.0.0.0' );
+define( 'RSSB_VERSION', '1.0.1.0' );
 define( 'RSSB_REQUIRED_WP_VERSION', '2.5' );
 
-add_action( 'wp_head', 'rs_scrapebreaker', -10 );
+add_action( 'send_headers', 'rssb_add_headers' );
+add_action( 'wp_head', 'rssb_scrapebreaker', -10 );
 
-function rs_scrapebreaker() {
+
+function rssb_add_headers() {
+	header( 'X-Frame-Options: sameorigin' );
+	}
+
+function rssb_scrapebreaker() {
 	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
 		$rs_this_page_prefix = 'https://';
 		}
@@ -60,3 +66,4 @@ function rs_scrapebreaker() {
 	}
 
 // PLUGIN - END
+?>
