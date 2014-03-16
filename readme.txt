@@ -36,7 +36,7 @@ Try it and see for yourself.
 
 == Changelog ==
 
-Version 1.0.1.1 *released 03/15/16*
+Version 1.0.1.1 *released 03/16/14*
 
 * Improved the implementation and removed deprecated code.
 
