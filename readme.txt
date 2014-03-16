@@ -36,6 +36,10 @@ Try it and see for yourself.
 
 == Changelog ==
 
+Version 1.0.1.1 *released 03/15/16*
+
+* Improved the implementation and removed deprecated code.
+
 Version 1.0.1.0 *released 03/15/14*
 
 * Added *X-Frame-Options* to HTTP headers for increased protection against framing and clickjacking.

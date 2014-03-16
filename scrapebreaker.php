@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.0.1.0
+Version: 1.0.1.1
 Author URI: http://www.redsandmarketing.com/
 License: GPLv2
 */
@@ -33,15 +33,15 @@ My use of the end curly braces "}" is a little funky in that I indent them, I kn
 */
 
 // Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.0.1.0' );
+define( 'RSSB_VERSION', '1.0.1.1' );
 define( 'RSSB_REQUIRED_WP_VERSION', '2.5' );
 
 add_action( 'send_headers', 'rssb_add_headers' );
 add_action( 'wp_head', 'rssb_scrapebreaker', -10 );
 
-
 function rssb_add_headers() {
-	header( 'X-Frame-Options: sameorigin' );
+	//header( 'X-RSSB-Test: TRUE' );
+	header( 'X-Frame-Options: SAMEORIGIN' );
 	}
 
 function rssb_scrapebreaker() {
@@ -52,17 +52,22 @@ function rssb_scrapebreaker() {
 		$rs_this_page_prefix = 'http://';
 		}
 	$rs_this_page_url = $rs_this_page_prefix.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-	if (is_admin()||current_user_can('level_10')){
-		return;	
+
+	$rssb_activated = rssb_activate();
+	if ( $rssb_activated=='yes' ) {
+		echo "\n<script type=\"text/javascript\" async >\n// <![CDATA[\nvar thispage = \"".$rs_this_page_url."\";\nif (top.location!=thispage){top.location.href=thispage}\n// ]]>\n</script>\n";
 		}
-	echo '
-	<script type="text/javascript" async >
-	// <![CDATA[
-	var thispage = "'.$rs_this_page_url.'";
-	if (top.location!=thispage){top.location.href=thispage}
-	// ]]>
-	</script>
-';
+	}
+
+function rssb_activate() {
+	$rssb_activated = 'no';
+	if (!is_admin()&&!is_user_logged_in()){ // Not in Admin section and not logged in on rest of site
+		// Was using current_user_can('level_10') - but is deprecated.
+		// Alternate is current_user_can('manage_options') - also viable.
+		// No reason for logged in users to be blocked, so is_user_logged_in() will suffice.
+		$rssb_activated = 'yes';
+		}
+	return $rssb_activated;
 	}
 
 // PLUGIN - END
