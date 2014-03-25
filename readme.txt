@@ -27,6 +27,9 @@ Try it and see for yourself.
 * Protect your website content and your brand.
 * Improve your SEO.
 
+= More Info / Documentation =
+For more info and full documentation, visit the [ScrapeBreaker homepage](http://www.redsandmarketing.com/plugins/scrapebreaker/).
+
 == Installation ==
 
 = Installation Instructions =
