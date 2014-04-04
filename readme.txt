@@ -1,8 +1,8 @@
 === ScrapeBreaker ===
 Contributors: RedSand
 Donate link: http://www.redsandmarketing.com/scrapebreaker-donate/
-Tags: framebreaker, frame-breaker, frame, break, javascript, anti-scraping, seo
-Requires at least: 2.8
+Tags: anti-scraping, break, content, Digg, framebreaker, frame-breaker, frame, frames, iframe, javascript, scraping, seo
+Requires at least: 3.0
 Tested up to: 3.9
 Stable tag: trunk
 
@@ -28,6 +28,9 @@ Try it and see for yourself.
 * Improve your SEO.
 
 = More Info / Documentation =
+
+If you want to test it out, be sure you are logged out, as it won't activate while you're logged in.
+
 For more info and full documentation, visit the [ScrapeBreaker homepage](http://www.redsandmarketing.com/plugins/scrapebreaker/).
 
 == Installation ==
@@ -35,9 +38,13 @@ For more info and full documentation, visit the [ScrapeBreaker homepage](http://
 = Installation Instructions =
 1. After downloading, unzip file and upload the enclosed `scrapebreaker` directory to your WordPress plugins directory: `/wp-content/plugins/`.
 2. As always, **activate** the plugin on your WordPress plugins page.
-3. You are good to go...it's that easy. 
+3. You are good to go...it's that easy.
 
 == Changelog ==
+
+Version 1.0.1.2 *released 04/03/14*
+
+* Minor code improvement.
 
 Version 1.0.1.1 *released 03/16/14*
 

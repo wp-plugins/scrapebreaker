@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.0.1.1
+Version: 1.0.1.2
 Author URI: http://www.redsandmarketing.com/
 License: GPLv2
 */
@@ -33,14 +33,13 @@ My use of the end curly braces "}" is a little funky in that I indent them, I kn
 */
 
 // Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.0.1.1' );
-define( 'RSSB_REQUIRED_WP_VERSION', '2.5' );
+define( 'RSSB_VERSION', '1.0.1.2' );
+define( 'RSSB_REQUIRED_WP_VERSION', '3.0' );
 
 add_action( 'send_headers', 'rssb_add_headers' );
 add_action( 'wp_head', 'rssb_scrapebreaker', -10 );
 
 function rssb_add_headers() {
-	//header( 'X-RSSB-Test: TRUE' );
 	header( 'X-Frame-Options: SAMEORIGIN' );
 	}
 
@@ -61,10 +60,8 @@ function rssb_scrapebreaker() {
 
 function rssb_activate() {
 	$rssb_activated = 'no';
-	if (!is_admin()&&!is_user_logged_in()){ // Not in Admin section and not logged in on rest of site
-		// Was using current_user_can('level_10') - but is deprecated.
-		// Alternate is current_user_can('manage_options') - also viable.
-		// No reason for logged in users to be blocked, so is_user_logged_in() will suffice.
+	if (!is_admin()&&!is_user_logged_in()){
+		// Not active when in Admin or logged in on rest of site. No reason for logged in users to be blocked.
 		$rssb_activated = 'yes';
 		}
 	return $rssb_activated;
