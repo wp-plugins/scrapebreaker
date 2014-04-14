@@ -42,6 +42,10 @@ For more info and full documentation, visit the [ScrapeBreaker homepage](http://
 
 == Changelog ==
 
+Version 1.0.1.3 *released 04/13/14*
+
+* Added additional security checks.
+
 Version 1.0.1.2 *released 04/03/14*
 
 * Minor code improvement.

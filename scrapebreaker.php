@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.0.1.2
+Version: 1.0.1.3
 Author URI: http://www.redsandmarketing.com/
 License: GPLv2
 */
@@ -32,8 +32,14 @@ License: GPLv2
 My use of the end curly braces "}" is a little funky in that I indent them, I know. IMO it's easier to debug. Just know that it's on purpose even though it's not standard. One of my programming quirks, and just how I roll. :)
 */
 
+// Make sure plugin remains secure if called directly
+if ( !function_exists( 'add_action' ) ) {
+	header('HTTP/1.1 403 Forbidden');
+	die('ERROR: This plugin requires WordPress and will not function if called directly.');
+	}
+
 // Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.0.1.2' );
+define( 'RSSB_VERSION', '1.0.1.3' );
 define( 'RSSB_REQUIRED_WP_VERSION', '3.0' );
 
 add_action( 'send_headers', 'rssb_add_headers' );
