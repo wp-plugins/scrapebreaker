@@ -20,12 +20,16 @@ Other scrapers just outright jack your site content. Well, that's over now.
 
 This plugin is better than other any frame-breaker plugins out there. Other frame-breakers will only test to see if your site is framed or not. This one will test to see if your content is present on a different domain, and if so, will redirect to the original content's URL. Also, uses X-Frame-Options in HTTP headers to keep your content from showing in frames on other web domains.
 
-Try it and see for yourself.
+The plugin won't activate the protection features in the WordPress Admin area or if a registered user is navigating your site while logged in.
+
+Features:
 
 * Get your website visitors back.
 * Retain credit for your work.
 * Protect your website content and your brand.
 * Improve your SEO.
+
+Try it and see for yourself.
 
 = More Info / Documentation =
 
@@ -59,6 +63,8 @@ Version 1.0.1.0 *released 03/15/14*
 * Added *X-Frame-Options* to HTTP headers for increased protection against framing and clickjacking.
 
 Version 1.0.0.0 *released 03/10/14*
+
+* Initial release.
 
 == Frequently Asked Questions ==
 
