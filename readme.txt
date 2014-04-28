@@ -46,6 +46,10 @@ For more info and full documentation, visit the [ScrapeBreaker homepage](http://
 
 == Changelog ==
 
+Version 1.0.1.4, *released 04/28/14*
+
+* Fixed a bug that caused an error message on certain server configurations.
+
 Version 1.0.1.3 *released 04/13/14*
 
 * Added additional security checks.
