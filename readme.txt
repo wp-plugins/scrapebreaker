@@ -3,7 +3,7 @@ Contributors: RedSand
 Donate link: http://www.redsandmarketing.com/scrapebreaker-donate/
 Tags: anti-scraping, break, content, Digg, framebreaker, frame-breaker, frame, frames, iframe, javascript, scraping, seo
 Requires at least: 3.0
-Tested up to: 3.9
+Tested up to: 4.0
 Stable tag: trunk
 
 A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques.
