@@ -2,7 +2,7 @@
 Contributors: RedSand
 Donate link: http://www.redsandmarketing.com/scrapebreaker-donate/
 Tags: anti-scraping, break, content, Digg, framebreaker, frame-breaker, frame, frames, iframe, javascript, scraping, seo
-Requires at least: 3.0
+Requires at least: 3.2
 Tested up to: 4.0
 Stable tag: trunk
 
@@ -40,11 +40,41 @@ For more info and full documentation, visit the [ScrapeBreaker homepage](http://
 == Installation ==
 
 = Installation Instructions =
-1. After downloading, unzip file and upload the enclosed `scrapebreaker` directory to your WordPress plugins directory: `/wp-content/plugins/`.
-2. As always, **activate** the plugin on your WordPress plugins page.
-3. You are good to go...it's that easy.
+
+**Option 1:** Install the plugin directly through the WordPress Admin Dashboard (Recommended)
+
+1. Go to *Plugins* -> *Add New*.
+
+2. Type *ScrapeBreaker* into the Search box, and click *Search Plugins*.
+
+3. When the results are displayed, click *Install Now*.
+
+4. When it says the plugin has successfully installed, click **Activate Plugin** to activate the plugin (or you can do this on the Plugins page).
+
+**Option 2:** Install .zip file through WordPress Admin Dashboard
+
+1. Go to *Plugins* -> *Add New* -> *Upload*.
+
+2. Click *Choose File* and find `scrapebreaker.zip` on your computer's hard drive.
+
+3. Click *Install Now*.
+
+4. Click **Activate Plugin** to activate the plugin (or you can do this on the Plugins page).
+
+**Option 3:** Install .zip file through an FTP Client (Recommended for Advanced Users Only)
+
+1. After downloading, unzip file and use an FTP client to upload the enclosed `scrapebreaker` directory to your WordPress plugins directory (usually `/wp-content/plugins/`) on your web server.
+
+2. Go to your Plugins page in the WordPress Admin Dashboard, and find this plugin in the list.
+
+3. Click **Activate** to activate the plugin.
 
 == Changelog ==
+
+Version 1.1, *released 09/06/14*
+
+* Added a Settings page in the Dashboard.
+* Added an option to only use the JavaScript Frame Breaker (redirect) and not use the X-Frame-Options HTTP header.
 
 Version 1.0.1.4, *released 04/28/14*
 
@@ -72,9 +102,21 @@ Version 1.0.0.0 *released 03/10/14*
 
 == Frequently Asked Questions ==
 
-= Where are the options? =
+= Can I set an option to just use the JavaScript Frame Breaker (redirect) and not use the X-Frame-Options HTTP header? =
 
-This plugin is fast, and lean...there are no options needed. You install it and it just works.
+Yes, the option was added in version 1.1. Just check the option on the Settings page and click 'Save Changes'.
+
+If you don't want slow your site down by adding additional database calls during page loads, you can set this option with a constant in the `wp-config.php` file. If you're not familiar with editing this file, then don't edit it. If you are, add these 2 lines to your `wp-config.php` file (before the line where it says to stop editing):
+
+`define( 'RSSB_OVERRIDE', true );
+define( 'RSSB_JS_ONLY', true );`
+
+Or if just want the speed improvement, but don't want to use that option:
+
+`define( 'RSSB_OVERRIDE', true );
+define( 'RSSB_JS_ONLY', false );`
+
+Keep in mind that this completely overrides anything you set in the Settings page, and we're not responsible if you break your site when you edit this file. (As always, back it up first.)
 
 = You do great work...can I hire you? =
 
