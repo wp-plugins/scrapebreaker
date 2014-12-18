@@ -2,8 +2,8 @@
 Contributors: RedSand
 Donate link: http://www.redsandmarketing.com/scrapebreaker-donate/
 Tags: anti-scraping, break, content, Digg, framebreaker, frame-breaker, frame, frames, iframe, javascript, scraping, seo
-Requires at least: 3.2
-Tested up to: 4.0
+Requires at least: 3.6
+Tested up to: 4.1
 Stable tag: trunk
 
 A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques.
@@ -36,6 +36,10 @@ Try it and see for yourself.
 If you want to test it out, be sure you are logged out, as it won't activate while you're logged in.
 
 For more info and full documentation, visit the [ScrapeBreaker homepage](http://www.redsandmarketing.com/plugins/scrapebreaker/).
+
+= Languages Available =
+
+* Serbian (sr_RS)
 
 == Installation ==
 
@@ -70,6 +74,13 @@ For more info and full documentation, visit the [ScrapeBreaker homepage](http://
 3. Click **Activate** to activate the plugin.
 
 == Changelog ==
+
+Version 1.2, *released 12/18/14*
+
+* Prepared the plugin for internationalization and localization, and created .pot file for translation.
+* Added Serbian Translation (sr_RS). Thank you to Ogi Djuraskovic of First Site Guide for doing the Serbian translation.
+* Increased minimum required WordPress version to 3.6.
+* Minor code improvements.
 
 Version 1.1, *released 09/06/14*
 

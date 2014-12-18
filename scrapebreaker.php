@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.1
+Version: 1.2
 Author URI: http://www.redsandmarketing.com/
 Text Domain: scrapebreaker
 License: GPLv2
@@ -42,8 +42,8 @@ if ( !function_exists( 'add_action' ) ) {
 	}
 
 // Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.1' );
-define( 'RSSB_REQUIRED_WP_VERSION', '3.2' );
+define( 'RSSB_VERSION', '1.2' );
+define( 'RSSB_REQUIRED_WP_VERSION', '3.6' );
 
 if ( !defined( 'RSSB_DEBUG' ) ) 				{ define( 'RSSB_DEBUG', false ); } // Do not change value unless developer asks you to - for debugging only. Change in wp-config.php.
 if ( !defined( 'RSSB_OVERRIDE' ) ) 				{ define( 'RSSB_OVERRIDE', false ); } // To improve speed by eliminating DB calls. Enables overriding the DB options. Change in wp-config.php.
@@ -87,7 +87,7 @@ function rssb_scrapebreaker() {
 
 	$rssb_activated = rssb_is_activated();
 	if ( $rssb_activated=='yes' ) {
-		echo "\n<script type=\"text/javascript\" >\n// <![CDATA[\nvar thispage = \"".$rs_this_page_url."\";\nif (top.location!=thispage){top.location.href=thispage}\n// ]]>\n</script>\n";
+		echo "\n<script type=\"text/javascript\" >\n// <![CDATA[\nvar thispage = \"".$rs_this_page_url."\";\nif (top.location!=thispage||window!=top){top.location.href=thispage;window.open(thispage,'_top');}\n// ]]>\n</script>\n";
 		}
 	}
 
@@ -155,6 +155,10 @@ function rssb_admin_notices() {
 		echo '<div class="'.$style.'"><p>'.$notice.'</p></div>';
 		}
 	delete_option('rssb_admin_notices');
+	}
+add_action( 'plugins_loaded', 'rssb_load_languages' );
+function rssb_load_languages() {
+	load_plugin_textdomain( RSSB_PLUGIN_NAME, false, basename( dirname( __FILE__ ) ) . '/languages' );
 	}
 add_action( 'admin_menu', 'rssb_add_plugin_settings_page' );
 add_filter( 'plugin_action_links', 'rssb_filter_plugin_actions', 10, 2 );
@@ -227,9 +231,9 @@ function rssb_plugin_settings_page() {
   			<p><strong><?php _e( 'Check out our other plugins', RSSB_PLUGIN_NAME ); ?>:</strong></p>
 			<p><?php _e( 'If you like ScrapeBreaker, you might want to check out our other plugins:', RSSB_PLUGIN_NAME ); ?></p>
 			<ul style="list-style-type:disc;padding-left:30px;">
-				<li><a href="http://www.redsandmarketing.com/plugins/wp-spamshield/" target="_blank" ><?php _e( 'WP-SpamShield Anti-Spam' ); ?></a> <?php _e( 'An extremely powerful and user friendly WordPress anti-spam plugin that stops blog comment spam cold, including trackback and pingback spam. Includes spam-blocking contact form feature, and protection from user registration spam as well. WP-SpamShield is an all-in-one spam solution for WordPress. See what it\'s like to run a WordPress site without spam!', RSSB_PLUGIN_NAME ); ?></li>
-				<li><a href="http://www.redsandmarketing.com/plugins/rs-head-cleaner/" target="_blank" ><?php _e( 'RS Head Cleaner Plus' ); ?></a> <?php _e( 'This plugin cleans up a number of issues, doing the work of multiple plugins, improving speed, efficiency, security, SEO, and user experience. It removes junk code from the HEAD & HTTP headers, moves JavaScript from header to footer, combines/minifies/caches CSS & JavaScript files, hides the Generator/WordPress Version number, removes version numbers from CSS and JS links, and fixes the "Read more" link so it displays the entire post.', RSSB_PLUGIN_NAME ); ?></li>
-				<li><a href="http://www.redsandmarketing.com/plugins/rs-feedburner/" target="_blank" ><?php _e( 'RS FeedBurner' ); ?></a> <?php _e( 'This plugin redirects all requests for your native WordPress feeds to your Feedburner feeds so you can track all your subscribers and maximize your blog/site readership and user engagement.', RSSB_PLUGIN_NAME ); ?></li>
+				<li><a href="http://www.redsandmarketing.com/plugins/wp-spamshield/" target="_blank" ><?php echo 'WP-SpamShield ' . __( 'Anti-Spam', RSSB_PLUGIN_NAME ); ?></a> <?php _e( 'An extremely powerful and user friendly WordPress anti-spam plugin that stops blog comment spam cold, including trackback and pingback spam. Includes spam-blocking contact form feature, and protection from user registration spam as well. WP-SpamShield is an all-in-one spam solution for WordPress. See what it\'s like to run a WordPress site without spam!', RSSB_PLUGIN_NAME ); ?></li>
+				<li><a href="http://www.redsandmarketing.com/plugins/rs-head-cleaner/" target="_blank" ><?php echo 'RS Head Cleaner Plus'; ?></a> <?php _e( 'This plugin cleans up a number of issues, doing the work of multiple plugins, improving speed, efficiency, security, SEO, and user experience. It removes junk code from the HEAD & HTTP headers, moves JavaScript from header to footer, combines/minifies/caches CSS & JavaScript files, hides the Generator/WordPress Version number, removes version numbers from CSS and JS links, and fixes the "Read more" link so it displays the entire post.', RSSB_PLUGIN_NAME ); ?></li>
+				<li><a href="http://www.redsandmarketing.com/plugins/rs-feedburner/" target="_blank" ><?php echo 'RS FeedBurner'; ?></a> <?php _e( 'This plugin redirects all requests for your native WordPress feeds to your Feedburner feeds so you can track all your subscribers and maximize your blog/site readership and user engagement.', RSSB_PLUGIN_NAME ); ?></li>
 			</ul>
 			<p>&nbsp;</p>
 
