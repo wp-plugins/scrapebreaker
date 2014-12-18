@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ScrapeBreaker\n"
+"POT-Creation-Date: 2014-12-16 19:03-0800\n"
+"PO-Revision-Date: 2014-12-16 19:04-0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_c\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.1\n"
+"X-Poedit-SearchPath-0: scrapebreaker\n"
+
+#: scrapebreaker.php:141
+#, php-format
+msgid ""
+"Plugin deactivated. WordPress Version %s required. Please upgrade WordPress "
+"to the latest version."
+msgstr ""
+
+#: scrapebreaker.php:175
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: scrapebreaker.php:184
+msgid "Plugin settings saved."
+msgstr ""
+
+#: scrapebreaker.php:207
+msgid "Use the JavaScript Frame Breaker only."
+msgstr ""
+
+#: scrapebreaker.php:207
+msgid ""
+"Use this option if you prefer to only use the JavaScript frame breaker and "
+"not use the X-Frame-Options. The default uses the X-Frame-Options as the "
+"first line of defense and falls back to the JavaScript redirect in older "
+"browsers that do not recognize X-Frame-Options. You may want to test and "
+"see which is the best option for you."
+msgstr ""
+
+#: scrapebreaker.php:219
+#, php-format
+msgid "Your %s settings are currently overriding the settings on this page."
+msgstr ""
+
+#: scrapebreaker.php:227
+msgid "Check out our other plugins:"
+msgstr ""
+
+#: scrapebreaker.php:228
+msgid ""
+"If you like ScrapeBreaker, you might want to check out our other "
+"plugins:"
+msgstr ""
+
+#: scrapebreaker.php:230
+msgid "Anti-Spam"
+msgstr ""
+
+#: scrapebreaker.php:230
+msgid ""
+"An extremely powerful and user friendly WordPress anti-spam plugin that "
+"stops blog comment spam cold, including trackback and pingback spam. "
+"Includes spam-blocking contact form feature, and protection from user "
+"registration spam as well. WP-SpamShield is an all-in-one spam solution "
+"for WordPress. See what it's like to run a WordPress site without spam!"
+msgstr ""
+
+#: scrapebreaker.php:231
+msgid ""
+"This plugin cleans up a number of issues, doing the work of multiple "
+"plugins, improving speed, efficiency, security, SEO, and user "
+"experience. It removes junk code from the HEAD & HTTP headers, moves "
+"JavaScript from header to footer, combines/minifies/caches CSS & "
+"JavaScript files, hides the Generator/WordPress Version number, "
+"removes version numbers from CSS and JS links, and fixes the \"Read "
+"more\" link so it displays the entire post."
+msgstr ""
+
+#: scrapebreaker.php:232
+msgid ""
+"This plugin redirects all requests for your native WordPress feeds "
+"to your Feedburner feeds so you can track all your subscribers and "
+"maximize your blog/site readership and user engagement."
+msgstr ""
