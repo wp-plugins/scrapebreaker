@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.2
+Version: 1.3
 Author URI: http://www.redsandmarketing.com/
 Text Domain: scrapebreaker
 License: GPLv2
@@ -42,8 +42,8 @@ if ( !function_exists( 'add_action' ) ) {
 	}
 
 // Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.2' );
-define( 'RSSB_REQUIRED_WP_VERSION', '3.6' );
+define( 'RSSB_VERSION', '1.3' );
+define( 'RSSB_REQUIRED_WP_VERSION', '3.7' );
 
 if ( !defined( 'RSSB_DEBUG' ) ) 				{ define( 'RSSB_DEBUG', false ); } // Do not change value unless developer asks you to - for debugging only. Change in wp-config.php.
 if ( !defined( 'RSSB_OVERRIDE' ) ) 				{ define( 'RSSB_OVERRIDE', false ); } // To improve speed by eliminating DB calls. Enables overriding the DB options. Change in wp-config.php.
@@ -93,7 +93,7 @@ function rssb_scrapebreaker() {
 
 function rssb_is_activated() {
 	$rssb_activated = 'no';
-	if (!is_admin()&&!is_user_logged_in()){
+	if ( !is_admin() && !is_user_logged_in() ){
 		// Not active when in Admin or logged in on rest of site. No reason for logged in users to be blocked.
 		$rssb_activated = 'yes';
 		}
@@ -108,6 +108,19 @@ function rssb_get_server_addr() {
 function rssb_get_server_name() {
 	if ( !empty( $_SERVER['SERVER_NAME'] ) ) { $server_name = strtolower( $_SERVER['SERVER_NAME'] ); } else { $server_name = strtolower( getenv('SERVER_NAME') ); }
 	return $server_name;
+	}
+function rssb_is_lang_en_us( $strict = true ) {
+	// Test if site is set to use English (US) - the default - or another language/localization
+	$rssb_locale = get_locale();
+	if ( $strict != true ) {
+		// Not strict - English, but localized translations may be in use
+		if ( !empty( $rssb_locale ) && !preg_match( "~^(en(_[a-z]{2})?)?$~i", $rssb_locale ) ) { $lang_en_us = false; } else { $lang_en_us = true; }
+		}
+	else {
+		// Strict - English (US), no translation being used
+		if ( !empty( $rssb_locale ) && !preg_match( "~^(en(_us)?)?$~i", $rssb_locale ) ) { $lang_en_us = false; } else { $lang_en_us = true; }
+		}
+	return $lang_en_us;
 	}
 // Standard Functions - END
 
@@ -125,6 +138,7 @@ function rssb_install_on_first_activation() {
 		else {
 			$rssb_options_update = array (
 				'use_js_frame_breaker_only' => 0, 
+				// Add more options here when added
 				);
 			}
 		update_option( 'rssb_options', $rssb_options_update );
@@ -217,7 +231,7 @@ function rssb_plugin_settings_page() {
 			<input type="submit" name="submit_rssb_options" value="<?php _e( 'Save Changes' ); ?>" class="button-primary" style="float:left;" />
 			</p>
 			</form>
-			
+
 			<?php
 			if ( RSSB_OVERRIDE ) {
 				$rssb_override_message = sprintf( __( 'Your %s settings are currently overriding the settings on this page.', RSSB_PLUGIN_NAME ), 'wp-config.php' );
@@ -228,6 +242,10 @@ function rssb_plugin_settings_page() {
 			<p>&nbsp;</p>
 			<p>&nbsp;</p>
 
+  			<p><strong><a href="http://www.redsandmarketing.com/scrapebreaker-donate/" target="_blank" ><?php _e( 'Donate to ScrapeBreaker', RSSB_PLUGIN_NAME ); ?></a></strong><br />
+			<?php echo __( 'ScrapeBreaker is provided for free.', RSSB_PLUGIN_NAME ) . ' ' . __( 'If you like the plugin, consider a donation to help further its development.', RSSB_PLUGIN_NAME ); ?></p>
+			<p>&nbsp;</p>
+
   			<p><strong><?php _e( 'Check out our other plugins', RSSB_PLUGIN_NAME ); ?>:</strong></p>
 			<p><?php _e( 'If you like ScrapeBreaker, you might want to check out our other plugins:', RSSB_PLUGIN_NAME ); ?></p>
 			<ul style="list-style-type:disc;padding-left:30px;">
@@ -236,6 +254,50 @@ function rssb_plugin_settings_page() {
 				<li><a href="http://www.redsandmarketing.com/plugins/rs-feedburner/" target="_blank" ><?php echo 'RS FeedBurner'; ?></a> <?php _e( 'This plugin redirects all requests for your native WordPress feeds to your Feedburner feeds so you can track all your subscribers and maximize your blog/site readership and user engagement.', RSSB_PLUGIN_NAME ); ?></li>
 			</ul>
 			<p>&nbsp;</p>
+
+			<?php
+			// Recommended Partners - BEGIN - Added in 1.3
+			if ( rssb_is_lang_en_us() ) {
+			?>
+			
+			<div style='width:647px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;'><p><strong>Recommended Partners</strong></p>
+			<p>Each of these products or services are ones that we highly recommend, based on our experience and the experience of our clients. We do receive a commission if you purchase one of these, but these are all products and services we were already recommending because we believe in them. By purchasing from these providers, you get quality and you help support the further development of ScrapeBreaker.</p>
+			</div>
+
+			<div style="width:300px;height:300px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;clear:left;">
+			<p><strong><a href="http://bit.ly/RSM_Hostgator" target="_blank" >Hostgator Website Hosting</a></strong></p>
+			<p><strong>Affordable, high quality web hosting. Great for WordPress and a variety of web applications.</strong></p>
+			<p>Hostgator has variety of affordable plans, reliable service, and customer support. Even on shared hosting, you get fast servers that are well-configured. Hostgator provides great balance of value and quality, which is why we recommend them.</p>
+			<p><a href="http://bit.ly/RSM_Hostgator"target="_blank" >Click here to find out more. >></a></p>
+			</div>
+
+			<div style="width:300px;height:300px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;">
+			<p><strong><a href="http://bit.ly/RSM_Level10" target="_blank" >Level10 Domains</a></strong></p>
+			<p><strong>Inexpensive web domains with an easy to use admin dashboard.</strong></p>
+			<p>Level10 Domains offers some of the best prices you'll find on web domain purchasing. The dashboard provides an easy way to manage your domains.</p>
+			<p><a href="http://bit.ly/RSM_Level10" target="_blank" >Click here to find out more. >></a></p>
+			</div>
+
+			<div style="width:300px;height:300px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;clear:left;">
+			<p><strong><a href="http://bit.ly/RSM_Genesis" target="_blank" >Genesis WordPress Framework</a></strong></p>
+			<p><strong>Other themes and frameworks have nothing on Genesis. Optimized for site speed and SEO.</strong></p>
+			<p>Simply put, the Genesis framework is one of the best ways to design and build a WordPress site. Built-in SEO and optimized for speed. Create just about any kind of design with child themes.</p>
+			<p><a href="http://bit.ly/RSM_Genesis" target="_blank" >Click here to find out more. >></a></p>
+			</div>
+
+			<div style="width:300px;height:300px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;">
+			<p><strong><a href="http://bit.ly/RSM_AIOSEOP" target="_blank" >All in One SEO Pack Pro</a></strong></p>
+			<p><strong>The best way to manage the code-related SEO for your WordPress site.</strong></p>
+			<p>Save time and effort optimizing the code of your WordPress site with All in One SEO Pack. One of the top rated, and most downloaded plugins on WordPress.org, this time-saving plugin is incredibly valuable. The pro version provides powerful features not available in the free version.</p>
+			<p><a href="http://bit.ly/RSM_AIOSEOP" target="_blank" >Click here to find out more. >></a></p>
+			</div>
+
+			<p style="clear:both;">&nbsp;</p>
+
+			<?php
+				}
+			// Recommended Partners - END - Added in 1.3
+			?>
 
 			</div>
 			<?php

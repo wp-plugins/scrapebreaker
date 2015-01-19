@@ -2,7 +2,7 @@
 Contributors: RedSand
 Donate link: http://www.redsandmarketing.com/scrapebreaker-donate/
 Tags: anti-scraping, break, content, Digg, framebreaker, frame-breaker, frame, frames, iframe, javascript, scraping, seo
-Requires at least: 3.6
+Requires at least: 3.7
 Tested up to: 4.1
 Stable tag: trunk
 
@@ -74,6 +74,12 @@ For more info and full documentation, visit the [ScrapeBreaker homepage](http://
 3. Click **Activate** to activate the plugin.
 
 == Changelog ==
+
+Version 1.3, *released 01/19/15*
+
+* Increased minimum required WordPress version to 3.7.
+* Minor update to translation files.
+* Added recommended partners to settings page.
 
 Version 1.2, *released 12/18/14*
 

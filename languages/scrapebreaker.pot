@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ScrapeBreaker\n"
-"POT-Creation-Date: 2014-12-16 19:03-0800\n"
-"PO-Revision-Date: 2014-12-16 19:04-0800\n"
+"POT-Creation-Date: 2014-12-16 19:00-0800\n"
+"PO-Revision-Date: 2015-01-19 13:00-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,26 +15,22 @@ msgstr ""
 "X-Generator: Poedit 1.7.1\n"
 "X-Poedit-SearchPath-0: scrapebreaker\n"
 
-#: scrapebreaker.php:141
+#: scrapebreaker.php:155
 #, php-format
 msgid ""
 "Plugin deactivated. WordPress Version %s required. Please upgrade WordPress "
 "to the latest version."
 msgstr ""
 
-#: scrapebreaker.php:175
-msgid "You do not have sufficient permissions to access this page."
-msgstr ""
-
-#: scrapebreaker.php:184
+#: scrapebreaker.php:202
 msgid "Plugin settings saved."
 msgstr ""
 
-#: scrapebreaker.php:207
+#: scrapebreaker.php:225
 msgid "Use the JavaScript Frame Breaker only."
 msgstr ""
 
-#: scrapebreaker.php:207
+#: scrapebreaker.php:225
 msgid ""
 "Use this option if you prefer to only use the JavaScript frame breaker and "
 "not use the X-Frame-Options. The default uses the X-Frame-Options as the "
@@ -43,26 +39,38 @@ msgid ""
 "see which is the best option for you."
 msgstr ""
 
-#: scrapebreaker.php:219
+#: scrapebreaker.php:237
 #, php-format
 msgid "Your %s settings are currently overriding the settings on this page."
 msgstr ""
 
-#: scrapebreaker.php:227
+#: scrapebreaker.php:245
+msgid "Donate to ScrapeBreaker"
+msgstr ""
+
+#: scrapebreaker.php:246
+msgid "ScrapeBreaker is provided for free."
+msgstr ""
+
+#: scrapebreaker.php:246
+msgid "If you like the plugin, consider a donation to help further its development."
+msgstr ""
+
+#: scrapebreaker.php:249
 msgid "Check out our other plugins:"
 msgstr ""
 
-#: scrapebreaker.php:228
+#: scrapebreaker.php:250
 msgid ""
 "If you like ScrapeBreaker, you might want to check out our other "
 "plugins:"
 msgstr ""
 
-#: scrapebreaker.php:230
+#: scrapebreaker.php:252
 msgid "Anti-Spam"
 msgstr ""
 
-#: scrapebreaker.php:230
+#: scrapebreaker.php:252
 msgid ""
 "An extremely powerful and user friendly WordPress anti-spam plugin that "
 "stops blog comment spam cold, including trackback and pingback spam. "
@@ -71,7 +79,7 @@ msgid ""
 "for WordPress. See what it's like to run a WordPress site without spam!"
 msgstr ""
 
-#: scrapebreaker.php:231
+#: scrapebreaker.php:253
 msgid ""
 "This plugin cleans up a number of issues, doing the work of multiple "
 "plugins, improving speed, efficiency, security, SEO, and user "
@@ -82,7 +90,7 @@ msgid ""
 "more\" link so it displays the entire post."
 msgstr ""
 
-#: scrapebreaker.php:232
+#: scrapebreaker.php:254
 msgid ""
 "This plugin redirects all requests for your native WordPress feeds "
 "to your Feedburner feeds so you can track all your subscribers and "
