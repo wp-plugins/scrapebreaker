@@ -73,50 +73,6 @@ For more info and full documentation, visit the [ScrapeBreaker homepage](http://
 
 3. Click **Activate** to activate the plugin.
 
-== Changelog ==
-
-Version 1.3, *released 01/19/15*
-
-* Increased minimum required WordPress version to 3.7.
-* Minor update to translation files.
-* Added recommended partners to settings page.
-
-Version 1.2, *released 12/18/14*
-
-* Prepared the plugin for internationalization and localization, and created .pot file for translation.
-* Added Serbian Translation (sr_RS). Thank you to Ogi Djuraskovic of First Site Guide for doing the Serbian translation.
-* Increased minimum required WordPress version to 3.6.
-* Minor code improvements.
-
-Version 1.1, *released 09/06/14*
-
-* Added a Settings page in the Dashboard.
-* Added an option to only use the JavaScript Frame Breaker (redirect) and not use the X-Frame-Options HTTP header.
-
-Version 1.0.1.4, *released 04/28/14*
-
-* Fixed a bug that caused an error message on certain server configurations.
-
-Version 1.0.1.3 *released 04/13/14*
-
-* Added additional security checks.
-
-Version 1.0.1.2 *released 04/03/14*
-
-* Minor code improvement.
-
-Version 1.0.1.1 *released 03/16/14*
-
-* Improved the implementation and removed deprecated code.
-
-Version 1.0.1.0 *released 03/15/14*
-
-* Added *X-Frame-Options* to HTTP headers for increased protection against framing and clickjacking.
-
-Version 1.0.0.0 *released 03/10/14*
-
-* Initial release.
-
 == Frequently Asked Questions ==
 
 = Can I set an option to just use the JavaScript Frame Breaker (redirect) and not use the X-Frame-Options HTTP header? =
@@ -138,3 +94,66 @@ Keep in mind that this completely overrides anything you set in the Settings pag
 = You do great work...can I hire you? =
 
 Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpress-consulting/">WordPress Consulting</a> page for more information.
+
+== Changelog ==
+
+= 1.3.1 =
+*released 03/06/15*
+
+* Fixed a minor bug.
+* Made various code improvements.
+
+= 1.3 =
+*released 01/19/15*
+
+* Increased minimum required WordPress version to 3.7.
+* Minor update to translation files.
+* Added recommended partners to settings page.
+
+= 1.2 =
+*released 12/18/14*
+
+* Prepared the plugin for internationalization and localization, and created .pot file for translation.
+* Added Serbian Translation (sr_RS). Thank you to Ogi Djuraskovic of First Site Guide for doing the Serbian translation.
+* Increased minimum required WordPress version to 3.6.
+* Minor code improvements.
+
+= 1.1 =
+*released 09/06/14*
+
+* Added a Settings page in the Dashboard.
+* Added an option to only use the JavaScript Frame Breaker (redirect) and not use the X-Frame-Options HTTP header.
+
+= 1.0.1.4 =
+*released 04/28/14*
+
+* Fixed a bug that caused an error message on certain server configurations.
+
+= 1.0.1.3 =
+*released 04/13/14*
+
+* Added additional security checks.
+
+= 1.0.1.2 =
+*released 04/03/14*
+
+* Minor code improvement.
+
+= 1.0.1.1 =
+*released 03/16/14*
+
+* Improved the implementation and removed deprecated code.
+
+= 1.0.1 =
+*released 03/15/14*
+
+* Added *X-Frame-Options* to HTTP headers for increased protection against framing and clickjacking.
+
+= 1.0 =
+*released 03/10/14*
+
+* Initial release.
+
+== Upgrade Notice ==
+= 1.3.1 =
+Fixed a minor bug, and made various minor code improvements. Please see Changelog for details.

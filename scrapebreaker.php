@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.3
+Version: 1.3.1
 Author URI: http://www.redsandmarketing.com/
 Text Domain: scrapebreaker
 License: GPLv2
@@ -42,16 +42,18 @@ if ( !function_exists( 'add_action' ) ) {
 	}
 
 // Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.3' );
+define( 'RSSB_VERSION', '1.3.1' );
 define( 'RSSB_REQUIRED_WP_VERSION', '3.7' );
 
-if ( !defined( 'RSSB_DEBUG' ) ) 				{ define( 'RSSB_DEBUG', false ); } // Do not change value unless developer asks you to - for debugging only. Change in wp-config.php.
-if ( !defined( 'RSSB_OVERRIDE' ) ) 				{ define( 'RSSB_OVERRIDE', false ); } // To improve speed by eliminating DB calls. Enables overriding the DB options. Change in wp-config.php.
-if ( !defined( 'RSSB_JS_ONLY' ) ) 				{ define( 'RSSB_JS_ONLY', false ); } // To improve speed by eliminating DB calls. Sets option to only use JS Frame Breaker & not use X-Frames-Options Change in wp-config.php.
+if ( !defined( 'RSSB_DEBUG' ) ) 				{ define( 'RSSB_DEBUG', false ); } 		// Do not change value unless developer asks you to - for debugging only. Change in wp-config.php.
+if ( !defined( 'RSSB_OVERRIDE' ) ) 				{ define( 'RSSB_OVERRIDE', false ); } 	// To improve speed by eliminating DB calls. Enables overriding the DB options. Change in wp-config.php.
+if ( !defined( 'RSSB_JS_ONLY' ) ) 				{ define( 'RSSB_JS_ONLY', false ); } 	// To improve speed by eliminating DB calls. Sets option to only use JS Frame Breaker & not use X-Frames-Options Change in wp-config.php.
 if ( !defined( 'RSSB_PLUGIN_BASENAME' ) ) 		{ define( 'RSSB_PLUGIN_BASENAME', plugin_basename( __FILE__ ) ); }
 if ( !defined( 'RSSB_PLUGIN_FILE_BASENAME' ) ) 	{ define( 'RSSB_PLUGIN_FILE_BASENAME', trim( basename( __FILE__ ), '/' ) ); }
 if ( !defined( 'RSSB_PLUGIN_NAME' ) ) 			{ define( 'RSSB_PLUGIN_NAME', trim( dirname( RSSB_PLUGIN_BASENAME ), '/' ) ); }
 // Constants prefixed with 'RSMP_' are shared with other RSM Plugins for efficiency.
+if ( !defined( 'RSMP_SITE_URL' ) ) 				{ define( 'RSMP_SITE_URL', untrailingslashit( site_url() ) ); }
+if ( !defined( 'RSMP_SITE_DOMAIN' ) ) 			{ define( 'RSMP_SITE_DOMAIN', rssb_get_domain( RSMP_SITE_URL ) ); }
 if ( !defined( 'RSMP_SERVER_ADDR' ) ) 			{ define( 'RSMP_SERVER_ADDR', rssb_get_server_addr() ); }
 if ( !defined( 'RSMP_SERVER_NAME' ) ) 			{ define( 'RSMP_SERVER_NAME', rssb_get_server_name() ); }
 if ( !defined( 'RSMP_SERVER_NAME_REV' ) ) 		{ define( 'RSMP_SERVER_NAME_REV', strrev( RSMP_SERVER_NAME ) ); }
@@ -77,37 +79,41 @@ function rssb_add_headers() {
 	}
 
 function rssb_scrapebreaker() {
-	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-		$rs_this_page_prefix = 'https://';
-		}
-	else {
-		$rs_this_page_prefix = 'http://';
-		}
-	$rs_this_page_url = $rs_this_page_prefix.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-
+	$rssb_this_page_url = rssb_get_url();
 	$rssb_activated = rssb_is_activated();
 	if ( $rssb_activated=='yes' ) {
-		echo "\n<script type=\"text/javascript\" >\n// <![CDATA[\nvar thispage = \"".$rs_this_page_url."\";\nif (top.location!=thispage||window!=top){top.location.href=thispage;window.open(thispage,'_top');}\n// ]]>\n</script>\n";
+		echo "\n<script type=\"text/javascript\" >\n// <![CDATA[\nvar thispage = \"".$rssb_this_page_url."\";\nif (top.location!=thispage||window!=top){top.location.href=thispage;window.open(thispage,'_top');}\n// ]]>\n</script>\n";
 		}
 	}
 
 function rssb_is_activated() {
 	$rssb_activated = 'no';
-	if ( !is_admin() && !is_user_logged_in() ){
-		// Not active when in Admin or logged in on rest of site. No reason for logged in users to be blocked.
+	if ( !is_admin() && !is_user_logged_in() && !is_preview() ){
+		// Not active when in Admin or logged in on rest of site. No reason for logged in users to be blocked. Also not active on previews.
 		$rssb_activated = 'yes';
 		}
 	return $rssb_activated;
 	}
 
 // Standard Functions - BEGIN
+function rssb_get_url() {
+	if ( !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) { $url = 'https://'; } else { $url = 'http://'; }
+	$url .= RSMP_SERVER_NAME . $_SERVER['REQUEST_URI'];
+	return $url;
+	}
 function rssb_get_server_addr() {
 	if ( !empty( $_SERVER['SERVER_ADDR'] ) ) { $server_addr = $_SERVER['SERVER_ADDR']; } else { $server_addr = getenv('SERVER_ADDR'); }
 	return $server_addr;
 	}
 function rssb_get_server_name() {
-	if ( !empty( $_SERVER['SERVER_NAME'] ) ) { $server_name = strtolower( $_SERVER['SERVER_NAME'] ); } else { $server_name = strtolower( getenv('SERVER_NAME') ); }
-	return $server_name;
+	$rssb_site_domain	= $server_name = RSMP_SITE_DOMAIN;
+	$rssb_env_http_host	= getenv('HTTP_HOST');
+	$rssb_env_srvr_name	= getenv('SERVER_NAME');
+	if 		( !empty( $_SERVER['HTTP_HOST'] ) 	&& strpos( $rssb_site_domain, $_SERVER['HTTP_HOST'] ) 	!== FALSE ) { $server_name = $_SERVER['HTTP_HOST']; }
+	elseif 	( !empty( $rssb_env_http_host ) 	&& strpos( $rssb_site_domain, $rssb_env_http_host ) 	!== FALSE ) { $server_name = $rssb_env_http_host; }
+	elseif 	( !empty( $_SERVER['SERVER_NAME'] ) && strpos( $rssb_site_domain, $_SERVER['SERVER_NAME'] ) !== FALSE ) { $server_name = $_SERVER['SERVER_NAME']; }
+	elseif 	( !empty( $rssb_env_srvr_name ) 	&& strpos( $rssb_site_domain, $rssb_env_srvr_name ) 	!== FALSE ) { $server_name = $rssb_env_srvr_name; }
+	return strtolower( $server_name );
 	}
 function rssb_is_lang_en_us( $strict = true ) {
 	// Test if site is set to use English (US) - the default - or another language/localization
@@ -122,6 +128,60 @@ function rssb_is_lang_en_us( $strict = true ) {
 		}
 	return $lang_en_us;
 	}
+function rssb_get_domain($url) {
+	// Get domain from URL
+	// Filter URLs with nothing after http
+	if ( empty( $url ) || preg_match( "~^https?\:*/*$~i", $url ) ) { return ''; }
+	// Fix poorly formed URLs so as not to throw errors when parsing
+	$url = rssb_fix_url($url);
+	// NOW start parsing
+	$parsed = parse_url($url);
+	// Filter URLs with no domain
+	if ( empty( $parsed['host'] ) ) { return ''; }
+	return strtolower($parsed['host']);
+	}
+function rssb_fix_url( $url, $rem_frag = FALSE, $rem_query = FALSE, $rev = FALSE ) {
+	// Fix poorly formed URLs so as not to throw errors or cause problems
+	// Too many forward slashes or colons after http
+	$url = preg_replace( "~^(https?)\:+/+~i", "$1://", $url);
+	// Too many dots
+	$url = preg_replace( "~\.+~i", ".", $url);
+	// Too many slashes after the domain
+	$url = preg_replace( "~([a-z0-9]+)/+([a-z0-9]+)~i", "$1/$2", $url);
+	// Remove fragments
+	if ( !empty( $rem_frag ) && strpos( $url, '#' ) !== FALSE ) { $url_arr = explode( '#', $url ); $url = $url_arr[0]; }
+	// Remove query string completely
+	if ( !empty( $rem_query ) && strpos( $url, '?' ) !== FALSE ) { $url_arr = explode( '?', $url ); $url = $url_arr[0]; }
+	// Reverse
+	if ( !empty( $rev ) ) { $url = strrev($url); }
+	return $url;
+	}
+function rssb_append_log_data( $str = NULL, $rsds_only = FALSE ) {
+	// Adds data to the log for debugging - only use when Debugging - Use with WP_DEBUG & RSSB_DEBUG
+	/*
+	* Example:
+	* rssb_append_log_data( "\n".'$rssb_example_variable: "'.$rssb_example_variable.'" Line: '.__LINE__.' | '.__FUNCTION__, TRUE );
+	* rssb_append_log_data( "\n".'$rssb_example_variable: "'.$rssb_example_variable.'" Line: '.__LINE__.' | '.__FUNCTION__.' | MEM USED: ' . rssb_format_bytes( memory_get_usage() ), TRUE );
+	* rssb_append_log_data( "\n".'[A]$rssb_example_array_var: "'.serialize($rssb_example_array_var).'" Line: '.__LINE__.' | '.__FUNCTION__.' | MEM USED: ' . rssb_format_bytes( memory_get_usage() ), TRUE );
+	* rssb_append_log_data( "\n".'Line: '.__LINE__.' | '.__FUNCTION__.' | MEM USED: ' . rssb_format_bytes( memory_get_usage() ), TRUE );
+	*/
+	if ( WP_DEBUG === TRUE && RSSB_DEBUG === TRUE ) {
+		if ( !empty( $rsds_only ) && strpos( RSMP_SERVER_NAME_REV, RSMP_DEBUG_SERVER_NAME_REV ) !== 0 ) { return; }
+		$rssb_log_str = 'ScrapeBreaker DEBUG: '.str_replace("\n", "", $str);
+		error_log( $rssb_log_str, 0 ); // Logs to debug.log
+		}
+	}
+function rssb_format_bytes( $size, $precision = 2 ) {
+	if ( !is_numeric($size) ) { return $size; }
+    $base = log($size) / log(1024);
+    $suffixes = array('', 'k', 'M', 'G', 'T');
+	$formatted_num = round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+    return $formatted_num;
+	}
+function rssb_doc_txt() {
+	$doc_txt = __( 'Documentation', RSSB_PLUGIN_NAME );
+	return $doc_txt;
+	}
 // Standard Functions - END
 
 // Admin Functions - BEGIN
@@ -132,7 +192,7 @@ function rssb_install_on_first_activation() {
 	if ( empty( $installed_ver ) || $installed_ver != RSSB_VERSION ) {
 		update_option('scrapebreaker_version', RSSB_VERSION);
 		// Set Initial Options
-		if ( !empty( $spamshield_options ) ) {
+		if ( !empty( $rssb_options ) ) {
 			$rssb_options_update = $rssb_options;
 			}
 		else {
@@ -176,11 +236,24 @@ function rssb_load_languages() {
 	}
 add_action( 'admin_menu', 'rssb_add_plugin_settings_page' );
 add_filter( 'plugin_action_links', 'rssb_filter_plugin_actions', 10, 2 );
+add_filter( 'plugin_row_meta', 'rssb_filter_plugin_meta', 10, 2 ); // Added 1.3.1
 function rssb_filter_plugin_actions( $links, $file ) {
 	// Add "Settings" Link on Admin Plugins page, in plugin listings
 	if ( $file == RSSB_PLUGIN_BASENAME ){
 		$settings_link = '<a href="options-general.php?page='.RSSB_PLUGIN_NAME.'">' . __('Settings') . '</a>';
 		array_unshift( $links, $settings_link ); // before other links
+		}
+	return $links;
+	}
+function rssb_filter_plugin_meta( $links, $file ) {
+	// Add Links on Dashboard Plugins page, in plugin meta
+	if ( $file == RSSB_PLUGIN_BASENAME ){
+		// after other links
+		//$links[] = '<a href="options-general.php?page='.RSSB_PLUGIN_NAME.'">' . __('Settings') . '</a>';
+		$links[] = '<a href="http://www.redsandmarketing.com/plugins/scrapebreaker/" target="_blank" rel="external" >' . rssb_doc_txt() . '</a>';
+		$links[] = '<a href="http://www.redsandmarketing.com/plugins/wordpress-plugin-support/" target="_blank" rel="external" >' . __( 'Support', RSSB_PLUGIN_NAME ) . '</a>';
+		$links[] = '<a href="http://bit.ly/scrapebreaker-rate" target="_blank" rel="external" >' . __( 'Rate the Plugin', RSSB_PLUGIN_NAME ) . '</a>';
+		$links[] = '<a href="http://bit.ly/scrapebreaker-donate" target="_blank" rel="external" >' . __( 'Donate', RSSB_PLUGIN_NAME ) . '</a>';
 		}
 	return $links;
 	}
@@ -260,45 +333,26 @@ function rssb_plugin_settings_page() {
 			if ( rssb_is_lang_en_us() ) {
 			?>
 			
-			<div style='width:647px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;'><p><strong>Recommended Partners</strong></p>
+			<div style='width:797px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;clear:left;'>
+			<p><h3>Recommended Partners</h3></p>
 			<p>Each of these products or services are ones that we highly recommend, based on our experience and the experience of our clients. We do receive a commission if you purchase one of these, but these are all products and services we were already recommending because we believe in them. By purchasing from these providers, you get quality and you help support the further development of ScrapeBreaker.</p>
 			</div>
 
-			<div style="width:300px;height:300px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;clear:left;">
-			<p><strong><a href="http://bit.ly/RSM_Hostgator" target="_blank" >Hostgator Website Hosting</a></strong></p>
-			<p><strong>Affordable, high quality web hosting. Great for WordPress and a variety of web applications.</strong></p>
-			<p>Hostgator has variety of affordable plans, reliable service, and customer support. Even on shared hosting, you get fast servers that are well-configured. Hostgator provides great balance of value and quality, which is why we recommend them.</p>
-			<p><a href="http://bit.ly/RSM_Hostgator"target="_blank" >Click here to find out more. >></a></p>
-			</div>
-
-			<div style="width:300px;height:300px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;">
-			<p><strong><a href="http://bit.ly/RSM_Level10" target="_blank" >Level10 Domains</a></strong></p>
-			<p><strong>Inexpensive web domains with an easy to use admin dashboard.</strong></p>
-			<p>Level10 Domains offers some of the best prices you'll find on web domain purchasing. The dashboard provides an easy way to manage your domains.</p>
-			<p><a href="http://bit.ly/RSM_Level10" target="_blank" >Click here to find out more. >></a></p>
-			</div>
-
-			<div style="width:300px;height:300px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;clear:left;">
-			<p><strong><a href="http://bit.ly/RSM_Genesis" target="_blank" >Genesis WordPress Framework</a></strong></p>
-			<p><strong>Other themes and frameworks have nothing on Genesis. Optimized for site speed and SEO.</strong></p>
-			<p>Simply put, the Genesis framework is one of the best ways to design and build a WordPress site. Built-in SEO and optimized for speed. Create just about any kind of design with child themes.</p>
-			<p><a href="http://bit.ly/RSM_Genesis" target="_blank" >Click here to find out more. >></a></p>
-			</div>
-
-			<div style="width:300px;height:300px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;">
-			<p><strong><a href="http://bit.ly/RSM_AIOSEOP" target="_blank" >All in One SEO Pack Pro</a></strong></p>
-			<p><strong>The best way to manage the code-related SEO for your WordPress site.</strong></p>
-			<p>Save time and effort optimizing the code of your WordPress site with All in One SEO Pack. One of the top rated, and most downloaded plugins on WordPress.org, this time-saving plugin is incredibly valuable. The pro version provides powerful features not available in the free version.</p>
-			<p><a href="http://bit.ly/RSM_AIOSEOP" target="_blank" >Click here to find out more. >></a></p>
-			</div>
-
-			<p style="clear:both;">&nbsp;</p>
-
 			<?php
-				}
-			// Recommended Partners - END - Added in 1.3
-			?>
+				$rssb_rpd 	= array(
+								array('clear:left;','RSM_Genesis','Genesis WordPress Framework','Other themes and frameworks have nothing on Genesis. Optimized for site speed and SEO.','Simply put, the Genesis framework is one of the best ways to design and build a WordPress site. Built-in SEO and optimized for speed. Create just about any kind of design with child themes.'),
+								array('','RSM_AIOSEOP','All in One SEO Pack Pro','The best way to manage the code-related SEO for your WordPress site.','Save time and effort optimizing the code of your WordPress site with All in One SEO Pack. One of the top rated, and most downloaded plugins on WordPress.org, this time-saving plugin is incredibly valuable. The pro version provides powerful features not available in the free version.'),
+								array('clear:left;','RSM_Hostgator','Hostgator Website Hosting','Affordable, high quality web hosting. Great for WordPress and a variety of web applications.','Hostgator has variety of affordable plans, reliable service, and customer support. Even on shared hosting, you get fast servers that are well-configured. Hostgator provides great balance of value and quality, which is why we recommend them.'),
+								array('','RSM_Level10','Level10 Domains','Inexpensive web domains with an easy to use admin dashboard.','Level10 Domains offers some of the best prices you\'ll find on web domain purchasing. The dashboard provides an easy way to manage your domains.'),
+								);
+				foreach( $rssb_rpd as $i => $v ) {
+					echo "\t".'<div style="width:375px;height:280px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;'.$v[0].'">'."\n\t".'<p><strong><a href="http://bit.ly/'.$v[1].'" target="_blank" rel="external" >'.$v[2].'</a></strong></p>'."\n\t".'<p><strong>'.$v[3].'</strong></p>'."\n\t".'<p>'.$v[4].'</p>'."\n\t".'<p><a href="http://bit.ly/'.$v[1].'" target="_blank" rel="external" >Click here to find out more. >></a></p>'."\n\t".'</div>'."\n";
+					}
 
+				}
+			// Recommended Partners - END
+			?>
+			<p style="clear:both;">&nbsp;</p>
 			</div>
 			<?php
 	}
