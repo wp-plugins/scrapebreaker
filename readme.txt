@@ -97,6 +97,12 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 
 == Changelog ==
 
+
+= 1.3.2 =
+*released 03/017/15*
+
+* Fixed an issue with URLs containing fragments ("#") that were incorrectly redirecting to the non-fragment version. This was fixed by modifying the JavaScript redirect to match the main part of the URL instead of doing an exact match for the full URL.
+
 = 1.3.1 =
 *released 03/06/15*
 
@@ -155,5 +161,5 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 * Initial release.
 
 == Upgrade Notice ==
-= 1.3.1 =
-Fixed a minor bug, and made various minor code improvements. Please see Changelog for details.
+= 1.3.2 =
+Fixed an issue with URLs containing fragments ("#") that were incorrectly redirecting to the non-fragment version. Please see Changelog for details.

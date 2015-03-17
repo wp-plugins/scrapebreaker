@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.3.1
+Version: 1.3.2
 Author URI: http://www.redsandmarketing.com/
 Text Domain: scrapebreaker
 License: GPLv2
@@ -35,14 +35,12 @@ My use of the closing curly braces "}" is a little funky in that I indent them, 
 
 // Make sure plugin remains secure if called directly
 if ( !function_exists( 'add_action' ) ) {
-	if ( !headers_sent() ) {
-		header('HTTP/1.1 403 Forbidden');
-		}
+	if ( !headers_sent() ) { header('HTTP/1.1 403 Forbidden'); }
 	die('ERROR: This plugin requires WordPress and will not function if called directly.');
 	}
 
 // Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.3.1' );
+define( 'RSSB_VERSION', '1.3.2' );
 define( 'RSSB_REQUIRED_WP_VERSION', '3.7' );
 
 if ( !defined( 'RSSB_DEBUG' ) ) 				{ define( 'RSSB_DEBUG', false ); } 		// Do not change value unless developer asks you to - for debugging only. Change in wp-config.php.
@@ -82,7 +80,7 @@ function rssb_scrapebreaker() {
 	$rssb_this_page_url = rssb_get_url();
 	$rssb_activated = rssb_is_activated();
 	if ( $rssb_activated=='yes' ) {
-		echo "\n<script type=\"text/javascript\" >\n// <![CDATA[\nvar thispage = \"".$rssb_this_page_url."\";\nif (top.location!=thispage||window!=top){top.location.href=thispage;window.open(thispage,'_top');}\n// ]]>\n</script>\n";
+		echo "\n<script type=\"text/javascript\" >\n// <![CDATA[\nfunction strpos (haystack, needle, offset) { var i = (haystack+'').indexOf(needle, (offset || 0)); return i === -1 ? false : i; }\nvar thispage = \"".$rssb_this_page_url."\";\nif (strpos(top.location,thispage)!==0||window!=top){top.location.href=thispage;window.open(thispage,'_top');}\n// ]]>\n</script>\n";
 		}
 	}
 
@@ -342,8 +340,6 @@ function rssb_plugin_settings_page() {
 				$rssb_rpd 	= array(
 								array('clear:left;','RSM_Genesis','Genesis WordPress Framework','Other themes and frameworks have nothing on Genesis. Optimized for site speed and SEO.','Simply put, the Genesis framework is one of the best ways to design and build a WordPress site. Built-in SEO and optimized for speed. Create just about any kind of design with child themes.'),
 								array('','RSM_AIOSEOP','All in One SEO Pack Pro','The best way to manage the code-related SEO for your WordPress site.','Save time and effort optimizing the code of your WordPress site with All in One SEO Pack. One of the top rated, and most downloaded plugins on WordPress.org, this time-saving plugin is incredibly valuable. The pro version provides powerful features not available in the free version.'),
-								array('clear:left;','RSM_Hostgator','Hostgator Website Hosting','Affordable, high quality web hosting. Great for WordPress and a variety of web applications.','Hostgator has variety of affordable plans, reliable service, and customer support. Even on shared hosting, you get fast servers that are well-configured. Hostgator provides great balance of value and quality, which is why we recommend them.'),
-								array('','RSM_Level10','Level10 Domains','Inexpensive web domains with an easy to use admin dashboard.','Level10 Domains offers some of the best prices you\'ll find on web domain purchasing. The dashboard provides an easy way to manage your domains.'),
 								);
 				foreach( $rssb_rpd as $i => $v ) {
 					echo "\t".'<div style="width:375px;height:280px;border-style:solid;border-width:1px;border-color:#333333;background-color:#FEFEFE;padding:0px 15px 0px 15px;margin-top:15px;margin-right:15px;float:left;'.$v[0].'">'."\n\t".'<p><strong><a href="http://bit.ly/'.$v[1].'" target="_blank" rel="external" >'.$v[2].'</a></strong></p>'."\n\t".'<p><strong>'.$v[3].'</strong></p>'."\n\t".'<p>'.$v[4].'</p>'."\n\t".'<p><a href="http://bit.ly/'.$v[1].'" target="_blank" rel="external" >Click here to find out more. >></a></p>'."\n\t".'</div>'."\n";
