@@ -73,6 +73,10 @@ For more info and full documentation, visit the [ScrapeBreaker homepage](http://
 
 3. Click **Activate** to activate the plugin.
 
+= Other Notes =
+
+This plugin has not been designed specifically for use with Multisite. It can be used in Multisite if activated *per site*, but *should not* be Network Activated. As with any plugin, test and make sure it works with your particular setup before using on a production site.
+
 == Frequently Asked Questions ==
 
 = Can I set an option to just use the JavaScript Frame Breaker (redirect) and not use the X-Frame-Options HTTP header? =
