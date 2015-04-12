@@ -101,9 +101,14 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 
 == Changelog ==
 
+= 1.3.3 =
+*released 04/11/15*
+
+* Added an uninstall function that completely uninstalls the plugin and removes all options, data, and traces of its existence when it is deleted through the dashboard.
+* Added a fix to prevent network activation when used in multisite, and added network admin notice to explain. The plugin can be used in multisite just fine, but will need to be activated individually per site for now. Once we can get time to adapt the plugin to multisite more specifically, we can remove this restriction.
 
 = 1.3.2 =
-*released 03/017/15*
+*released 03/17/15*
 
 * Fixed an issue with URLs containing fragments ("#") that were incorrectly redirecting to the non-fragment version. This was fixed by modifying the JavaScript redirect to match the main part of the URL instead of doing an exact match for the full URL.
 
@@ -165,5 +170,5 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 * Initial release.
 
 == Upgrade Notice ==
-= 1.3.2 =
-Fixed an issue with URLs containing fragments ("#") that were incorrectly redirecting to the non-fragment version. Please see Changelog for details.
+= 1.3.3 =
+Added an uninstall function that completely uninstalls the plugin and removes its data, and added a fix to prevent network activation when used in multisite. Please see Changelog for details.

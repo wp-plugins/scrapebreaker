@@ -4,13 +4,13 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.3.2
+Version: 1.3.3
 Author URI: http://www.redsandmarketing.com/
 Text Domain: scrapebreaker
 License: GPLv2
 */
 
-/*  Copyright 2014    Scott Allen  (email : plugins [at] redsandmarketing [dot] com)
+/*  Copyright 2014-2015    Scott Allen  (email : plugins [at] redsandmarketing [dot] com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ License: GPLv2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// PLUGIN - BEGIN
+/* PLUGIN - BEGIN */
 
 /* Note to any other PHP developers reading this:
 My use of the closing curly braces "}" is a little funky in that I indent them, I know. IMO it's easier to debug. Just know that it's on purpose even though it's not standard. One of my programming quirks, and just how I roll. :)
@@ -40,7 +40,7 @@ if ( !function_exists( 'add_action' ) ) {
 	}
 
 // Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.3.2' );
+define( 'RSSB_VERSION', '1.3.3' );
 define( 'RSSB_REQUIRED_WP_VERSION', '3.7' );
 
 if ( !defined( 'RSSB_DEBUG' ) ) 				{ define( 'RSSB_DEBUG', false ); } 		// Do not change value unless developer asks you to - for debugging only. Change in wp-config.php.
@@ -183,16 +183,14 @@ function rssb_doc_txt() {
 // Standard Functions - END
 
 // Admin Functions - BEGIN
-register_activation_hook( __FILE__, 'rssb_install_on_first_activation' );
-function rssb_install_on_first_activation() {
+register_activation_hook( __FILE__, 'rssb_activation' );
+function rssb_activation() {
 	$installed_ver 	= get_option('scrapebreaker_version');
 	$rssb_options 	= get_option('rssb_options');
+	rssb_upgrade_check( $installed_ver );
 	if ( empty( $installed_ver ) || $installed_ver != RSSB_VERSION ) {
-		update_option('scrapebreaker_version', RSSB_VERSION);
 		// Set Initial Options
-		if ( !empty( $rssb_options ) ) {
-			$rssb_options_update = $rssb_options;
-			}
+		if ( !empty( $rssb_options ) ) { $rssb_options_update = $rssb_options; }
 		else {
 			$rssb_options_update = array (
 				'use_js_frame_breaker_only' => 0, 
@@ -204,7 +202,21 @@ function rssb_install_on_first_activation() {
 	}
 add_action( 'admin_init', 'rssb_check_version' );
 function rssb_check_version() {
-	if ( current_user_can('manage_options') ) {
+	if ( current_user_can( 'manage_network' ) ) {
+		/* Check for pending admin notices */
+		$admin_notices = get_option('rssb_admin_notices');
+		if ( !empty( $admin_notices ) ) { add_action( 'network_admin_notices', 'rssb_admin_notices' ); }
+		/* Make sure not network activated */
+		if ( is_plugin_active_for_network( RSSB_PLUGIN_BASENAME ) ) {
+			deactivate_plugins( RSSB_PLUGIN_BASENAME, TRUE, TRUE );
+			$notice_text = __( 'Plugin deactivated. ScrapeBreaker is not available for network activation.', RSSB_PLUGIN_NAME );
+			$new_admin_notice = array( 'style' => 'error', 'notice' => $notice_text );
+			update_option( 'rssb_admin_notices', $new_admin_notice );
+			add_action( 'network_admin_notices', 'rssb_admin_notices' );
+			return FALSE;
+			}
+		}
+	elseif ( current_user_can('manage_options') ) {
 		// Make sure user has minimum required WordPress version, in order to prevent issues
 		global $wp_version;
 		$rssb_wp_version = $wp_version;
@@ -227,6 +239,13 @@ function rssb_admin_notices() {
 		echo '<div class="'.$style.'"><p>'.$notice.'</p></div>';
 		}
 	delete_option('rssb_admin_notices');
+	}
+function rssb_upgrade_check( $installed_ver = NULL ) {
+	if ( empty( $installed_ver ) ) { $installed_ver = get_option( 'scrapebreaker_version' ); }
+	if ( $installed_ver != RSSB_VERSION ) {
+		$upd_options = array( 'scrapebreaker_version' => RSSB_VERSION, );
+		foreach( $upd_options as $option => $val ) { update_option( $option, $val ); }
+		}
 	}
 add_action( 'plugins_loaded', 'rssb_load_languages' );
 function rssb_load_languages() {
@@ -354,5 +373,4 @@ function rssb_plugin_settings_page() {
 	}
 // Admin Functions - END
 
-// PLUGIN - END
-?>
+/* PLUGIN - END */
