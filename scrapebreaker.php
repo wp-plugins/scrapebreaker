@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.3.3
+Version: 1.3.4
 Author URI: http://www.redsandmarketing.com/
 Text Domain: scrapebreaker
 License: GPLv2
@@ -33,15 +33,15 @@ License: GPLv2
 My use of the closing curly braces "}" is a little funky in that I indent them, I know. IMO it's easier to debug. Just know that it's on purpose even though it's not standard. One of my programming quirks, and just how I roll. :)
 */
 
-// Make sure plugin remains secure if called directly
-if ( !function_exists( 'add_action' ) ) {
+/* Make sure plugin remains secure if called directly */
+if ( !defined( 'ABSPATH' ) ) {
 	if ( !headers_sent() ) { header('HTTP/1.1 403 Forbidden'); }
-	die('ERROR: This plugin requires WordPress and will not function if called directly.');
+	die( 'ERROR: This plugin requires WordPress and will not function if called directly.' );
 	}
 
-// Setting constants in case we expand later on
-define( 'RSSB_VERSION', '1.3.3' );
-define( 'RSSB_REQUIRED_WP_VERSION', '3.7' );
+define( 'RSSB_VERSION', '1.3.4' );
+define( 'RSSB_REQUIRED_WP_VERSION', '3.8' );
+//define( 'RSSB_REQUIRED_PHP_VERSION', '5.3' ); /* Implement in future version */
 
 if ( !defined( 'RSSB_DEBUG' ) ) 				{ define( 'RSSB_DEBUG', false ); } 		// Do not change value unless developer asks you to - for debugging only. Change in wp-config.php.
 if ( !defined( 'RSSB_OVERRIDE' ) ) 				{ define( 'RSSB_OVERRIDE', false ); } 	// To improve speed by eliminating DB calls. Enables overriding the DB options. Change in wp-config.php.
@@ -57,6 +57,10 @@ if ( !defined( 'RSMP_SERVER_NAME' ) ) 			{ define( 'RSMP_SERVER_NAME', rssb_get_
 if ( !defined( 'RSMP_SERVER_NAME_REV' ) ) 		{ define( 'RSMP_SERVER_NAME_REV', strrev( RSMP_SERVER_NAME ) ); }
 if ( !defined( 'RSMP_DEBUG_SERVER_NAME' ) ) 	{ define( 'RSMP_DEBUG_SERVER_NAME', '.redsandmarketing.com' ); }
 if ( !defined( 'RSMP_DEBUG_SERVER_NAME_REV' ) )	{ define( 'RSMP_DEBUG_SERVER_NAME_REV', strrev( RSMP_DEBUG_SERVER_NAME ) ); }
+if ( !defined( 'RSMP_WP_VERSION' ) ) {
+	global $wp_version;
+	define( 'RSMP_WP_VERSION', $wp_version );
+	}
 
 add_action( 'send_headers', 'rssb_add_headers' );
 add_action( 'wp_head', 'rssb_scrapebreaker', -10 );
@@ -94,6 +98,29 @@ function rssb_is_activated() {
 	}
 
 // Standard Functions - BEGIN
+function rssb_casetrans( $type, $string ) {
+	/***
+	* Convert case using multibyte version if available, if not, use defaults
+	* Added 1.8.4
+	***/
+	switch ($type) {
+		case 'upper':
+			if ( function_exists( 'mb_strtoupper' ) ) { return mb_strtoupper($string, 'UTF-8'); } else { return strtoupper($string); }
+		case 'lower':
+			if ( function_exists( 'mb_strtolower' ) ) { return mb_strtolower($string, 'UTF-8'); } else { return strtolower($string); }
+		case 'ucfirst':
+			if ( function_exists( 'mb_strtoupper' ) && function_exists( 'mb_substr' ) ) { return mb_strtoupper(mb_substr($string, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($string, 1, NULL, 'UTF-8'); } else { return ucfirst($string); }
+		case 'ucwords':
+			if ( function_exists( 'mb_convert_case' ) ) { return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8'); } else { return ucwords($string); }
+			/***
+			* Note differences in results between ucwords() and this. 
+			* ucwords() will capitalize first characters without altering other characters, whereas this will lowercase everything, but capitalize the first character of each word.
+			* This works better for our purposes, but be aware of differences.
+			***/
+		default:
+			return $string;
+		}
+	}
 function rssb_get_url() {
 	if ( !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) { $url = 'https://'; } else { $url = 'http://'; }
 	$url .= RSMP_SERVER_NAME . $_SERVER['REQUEST_URI'];
@@ -111,7 +138,7 @@ function rssb_get_server_name() {
 	elseif 	( !empty( $rssb_env_http_host ) 	&& strpos( $rssb_site_domain, $rssb_env_http_host ) 	!== FALSE ) { $server_name = $rssb_env_http_host; }
 	elseif 	( !empty( $_SERVER['SERVER_NAME'] ) && strpos( $rssb_site_domain, $_SERVER['SERVER_NAME'] ) !== FALSE ) { $server_name = $_SERVER['SERVER_NAME']; }
 	elseif 	( !empty( $rssb_env_srvr_name ) 	&& strpos( $rssb_site_domain, $rssb_env_srvr_name ) 	!== FALSE ) { $server_name = $rssb_env_srvr_name; }
-	return strtolower( $server_name );
+	return rssb_casetrans( 'lower', $server_name );
 	}
 function rssb_is_lang_en_us( $strict = true ) {
 	// Test if site is set to use English (US) - the default - or another language/localization
@@ -136,7 +163,7 @@ function rssb_get_domain($url) {
 	$parsed = parse_url($url);
 	// Filter URLs with no domain
 	if ( empty( $parsed['host'] ) ) { return ''; }
-	return strtolower($parsed['host']);
+	return rssb_casetrans( 'lower', $parsed['host'] );
 	}
 function rssb_fix_url( $url, $rem_frag = FALSE, $rem_query = FALSE, $rev = FALSE ) {
 	// Fix poorly formed URLs so as not to throw errors or cause problems
@@ -216,10 +243,14 @@ function rssb_check_version() {
 			return FALSE;
 			}
 		}
-	elseif ( current_user_can('manage_options') ) {
-		// Make sure user has minimum required WordPress version, in order to prevent issues
-		global $wp_version;
-		$rssb_wp_version = $wp_version;
+	if ( current_user_can('manage_options') ) {
+		/* Check if plugin has been upgraded */
+		rssb_upgrade_check();
+		/* Check for pending admin notices */
+		$admin_notices = get_option('rssb_admin_notices');
+		if ( !empty( $admin_notices ) ) { add_action( 'admin_notices', 'rssb_admin_notices' ); }
+		/* Make sure user has minimum required WordPress version, in order to prevent issues */
+		$rssb_wp_version = RSMP_WP_VERSION;
 		if ( version_compare( $rssb_wp_version, RSSB_REQUIRED_WP_VERSION, '<' ) ) {
 			deactivate_plugins( RSSB_PLUGIN_BASENAME );
 			$notice_text = sprintf( __( 'Plugin deactivated. WordPress Version %s required. Please upgrade WordPress to the latest version.', RSSB_PLUGIN_NAME ), RSSB_REQUIRED_WP_VERSION );
@@ -228,7 +259,6 @@ function rssb_check_version() {
 			add_action( 'admin_notices', 'rssb_admin_notices' );
 			return false;
 			}
-		add_action( 'admin_notices', 'rssb_admin_notices' );
 		}
 	}
 function rssb_admin_notices() {

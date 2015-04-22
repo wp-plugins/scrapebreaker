@@ -2,8 +2,8 @@
 Contributors: RedSand
 Donate link: http://www.redsandmarketing.com/scrapebreaker-donate/
 Tags: anti-scraping, break, content, Digg, framebreaker, frame-breaker, frame, frames, iframe, javascript, scraping, seo
-Requires at least: 3.7
-Tested up to: 4.1
+Requires at least: 3.8
+Tested up to: 4.2
 Stable tag: trunk
 
 A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques.
@@ -101,6 +101,13 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 
 == Changelog ==
 
+= 1.3.4 =
+*released 04/22/15*
+
+* Increased minimum required WordPress version to 3.8.
+* Added an `.htaccess` file to the `scrapebreaker` directory to control browser access to certain files.
+* Made various minor code improvements.
+
 = 1.3.3 =
 *released 04/11/15*
 
@@ -170,5 +177,5 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 * Initial release.
 
 == Upgrade Notice ==
-= 1.3.3 =
-Added an uninstall function that completely uninstalls the plugin and removes its data, and added a fix to prevent network activation when used in multisite. Please see Changelog for details.
+= 1.3.4 =
+Added an .htaccess file, increased the minimum required WordPress version to 3.8, and made various code improvements. Please see Changelog for details.
