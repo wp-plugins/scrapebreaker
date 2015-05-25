@@ -41,6 +41,10 @@ For more info and full documentation, visit the [ScrapeBreaker homepage](http://
 
 * Serbian (sr_RS)
 
+= Disclaimer =
+
+Unfortunately no plugin can stop 100% of scrapers, but we can dramatically reduce the amount of scraping that is done on a website.
+
 == Installation ==
 
 = Installation Instructions =
