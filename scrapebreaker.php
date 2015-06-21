@@ -4,7 +4,7 @@ Plugin Name: ScrapeBreaker
 Plugin URI: http://www.redsandmarketing.com/plugins/scrapebreaker/
 Description: A combination of frame-breaker and scraper protection. Protect your website content from both frames and server-side scraping techniques. If either happens, visitors will be redirected to the original content.
 Author: Scott Allen
-Version: 1.3.4
+Version: 1.3.5
 Author URI: http://www.redsandmarketing.com/
 Text Domain: scrapebreaker
 License: GPLv2
@@ -39,7 +39,7 @@ if ( !defined( 'ABSPATH' ) ) {
 	die( 'ERROR: This plugin requires WordPress and will not function if called directly.' );
 	}
 
-define( 'RSSB_VERSION', '1.3.4' );
+define( 'RSSB_VERSION', '1.3.5' );
 define( 'RSSB_REQUIRED_WP_VERSION', '3.8' );
 //define( 'RSSB_REQUIRED_PHP_VERSION', '5.3' ); /* Implement in future version */
 
@@ -84,7 +84,7 @@ function rssb_scrapebreaker() {
 	$rssb_this_page_url = rssb_get_url();
 	$rssb_activated = rssb_is_activated();
 	if ( $rssb_activated=='yes' ) {
-		echo "\n<script type=\"text/javascript\" >\n// <![CDATA[\nfunction strpos (haystack, needle, offset) { var i = (haystack+'').indexOf(needle, (offset || 0)); return i === -1 ? false : i; }\nvar thispage = \"".$rssb_this_page_url."\";\nif (strpos(top.location,thispage)!==0||window!=top){top.location.href=thispage;window.open(thispage,'_top');}\n// ]]>\n</script>\n";
+		echo "\n<script type=\"text/javascript\" >\n/* <![CDATA[ */\nfunction strpos (haystack, needle, offset) { var i = (haystack+'').indexOf(needle, (offset || 0)); return i === -1 ? false : i; }\nvar thispage = \"".$rssb_this_page_url."\";\nif (strpos(top.location,thispage)!==0||window!=top){top.location.href=thispage;window.open(thispage,'_top');}\n/* ]]> */\n</script>\n";
 		}
 	}
 
@@ -122,12 +122,17 @@ function rssb_casetrans( $type, $string ) {
 		}
 	}
 function rssb_get_url() {
-	if ( !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) { $url = 'https://'; } else { $url = 'http://'; }
-	$url .= RSMP_SERVER_NAME . $_SERVER['REQUEST_URI'];
+	$url  = rssb_is_https() ? 'https://' : 'http://';
+	$url .= RSMP_SERVER_NAME.$_SERVER['REQUEST_URI'];
 	return $url;
+	}
+function rssb_is_https() {
+	if ( !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) { return TRUE; }
+	return FALSE;
 	}
 function rssb_get_server_addr() {
 	if ( !empty( $_SERVER['SERVER_ADDR'] ) ) { $server_addr = $_SERVER['SERVER_ADDR']; } else { $server_addr = getenv('SERVER_ADDR'); }
+	if ( empty( $server_addr ) ) { $server_addr = ''; }
 	return $server_addr;
 	}
 function rssb_get_server_name() {
@@ -185,10 +190,8 @@ function rssb_append_log_data( $str = NULL, $rsds_only = FALSE ) {
 	// Adds data to the log for debugging - only use when Debugging - Use with WP_DEBUG & RSSB_DEBUG
 	/*
 	* Example:
-	* rssb_append_log_data( "\n".'$rssb_example_variable: "'.$rssb_example_variable.'" Line: '.__LINE__.' | '.__FUNCTION__, TRUE );
 	* rssb_append_log_data( "\n".'$rssb_example_variable: "'.$rssb_example_variable.'" Line: '.__LINE__.' | '.__FUNCTION__.' | MEM USED: ' . rssb_format_bytes( memory_get_usage() ), TRUE );
 	* rssb_append_log_data( "\n".'[A]$rssb_example_array_var: "'.serialize($rssb_example_array_var).'" Line: '.__LINE__.' | '.__FUNCTION__.' | MEM USED: ' . rssb_format_bytes( memory_get_usage() ), TRUE );
-	* rssb_append_log_data( "\n".'Line: '.__LINE__.' | '.__FUNCTION__.' | MEM USED: ' . rssb_format_bytes( memory_get_usage() ), TRUE );
 	*/
 	if ( WP_DEBUG === TRUE && RSSB_DEBUG === TRUE ) {
 		if ( !empty( $rsds_only ) && strpos( RSMP_SERVER_NAME_REV, RSMP_DEBUG_SERVER_NAME_REV ) !== 0 ) { return; }
@@ -197,10 +200,13 @@ function rssb_append_log_data( $str = NULL, $rsds_only = FALSE ) {
 		}
 	}
 function rssb_format_bytes( $size, $precision = 2 ) {
-	if ( !is_numeric($size) ) { return $size; }
+	if ( !is_numeric( $size ) || empty( $size ) ) { return $size; }
     $base = log($size) / log(1024);
+    $base_floor = floor($base);
     $suffixes = array('', 'k', 'M', 'G', 'T');
-	$formatted_num = round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+    $suffix = isset( $suffixes[$base_floor] ) ? $suffixes[$base_floor] : '';
+	if ( empty($suffix) ) { return $size; }
+	$formatted_num = round(pow(1024, $base - $base_floor), $precision) . $suffix;
     return $formatted_num;
 	}
 function rssb_doc_txt() {

@@ -105,6 +105,11 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 
 == Changelog ==
 
+= 1.3.5 =
+*released 06/20/15*
+
+* Made various minor code improvements.
+
 = 1.3.4 =
 *released 04/22/15*
 
@@ -181,5 +186,5 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 * Initial release.
 
 == Upgrade Notice ==
-= 1.3.4 =
-Added an .htaccess file, increased the minimum required WordPress version to 3.8, and made various code improvements. Please see Changelog for details.
+= 1.3.5 =
+Made various code improvements. Please see Changelog for details.
