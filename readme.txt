@@ -105,6 +105,11 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 
 == Changelog ==
 
+= 1.3.6 =
+*released 07/17/15*
+
+* Made various code improvements.
+
 = 1.3.5 =
 *released 06/20/15*
 
@@ -186,5 +191,5 @@ Absolutely...go to my <a href="http://www.redsandmarketing.com/web-design/wordpr
 * Initial release.
 
 == Upgrade Notice ==
-= 1.3.5 =
+= 1.3.6 =
 Made various code improvements. Please see Changelog for details.
